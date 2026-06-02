@@ -8,12 +8,6 @@ import App from './App';
 import { RegionProvider } from './components/RegionContext';
 import ErrorBoundary from './components/ErrorBoundary';
 
-// Override console methods to prevent any leaks to the console
-console.warn = () => {};
-console.error = () => {};
-// Allow this specific log
-console.log("%cWhole site made by “Vibe Gadget”", "color: #10b981; font-size: 16px; font-weight: bold;");
-
 // Suppress benign ResizeObserver errors that can cause unhandled overlays
 const debounce = (cb) => {
   let frame;

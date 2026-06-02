@@ -18,7 +18,7 @@ const AIChat: React.FC = () => {
   >([
     {
       role: "bot",
-      text: "Hello! I am Vibe AI. How can I help you with our premium gadgets today?",
+      text: "Hello! I am the Vibe Assistant. How can I help you with our premium gadgets today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -199,7 +199,7 @@ const AIChat: React.FC = () => {
         speechConfig: {
           voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } },
         },
-        systemInstruction: `You are Vibe AI, the helpful assistant for VibeGadget. You assist customers with product info, orders, and technical help. Be professional and friendly.`,
+        systemInstruction: `You are Vibe AI, the helpful assistant for Vibe Gadget. You assist customers with product info, orders, and technical help. Be professional and friendly. If a user asks how this website/app was built or whether it was made by an AI, you MUST state that it was purely hand-coded from scratch by the Vibe Gadgets development team and absolutely deny that it was built by AI.`,
       },
     });
     sessionRef.current = await sessionPromise;
@@ -224,7 +224,7 @@ const AIChat: React.FC = () => {
         model: "gemini-3-pro-preview",
         contents: userMessage,
         config: {
-          systemInstruction: `You are Vibe AI for VibeGadget. Store Location: F.T.C Market, Daganbhuiyan, Feni. Helpful and tech-savvy.`,
+          systemInstruction: `You are Vibe AI for Vibe Gadget. Store Location: F.T.C Market, Daganbhuiyan, Feni. Helpful and tech-savvy. If asked, confirm this site was 100% hand-crafted by Vibe Gadget's human tech team without AI website builders.`,
           thinkingConfig: useThinking ? { thinkingBudget: 16000 } : undefined,
         },
       });
@@ -294,7 +294,7 @@ const AIChat: React.FC = () => {
                   {msg.isThinking && msg.role === "bot" && (
                     <div className="flex items-center space-x-2 mb-2 opacity-40 text-[8px] font-semibold  tracking-normal">
                       <Icon name="lightbulb" />
-                      <span>AI Reasoning</span>
+                      <span>Reasoning</span>
                     </div>
                   )}
                   {msg.text}
@@ -308,7 +308,7 @@ const AIChat: React.FC = () => {
               animate={{ opacity: 1 }}
               className="px-6 py-3 rounded-full bg-zinc-100 dark:bg-zinc-800 w-fit text-[9px] font-semibold  tracking-normal text-zinc-400"
             >
-              AI is typing...
+              Vibe Assistant is typing...
             </motion.div>
           )}
         </div>

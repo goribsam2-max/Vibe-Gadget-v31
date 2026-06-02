@@ -61,6 +61,15 @@ export function setupProtection() {
   const origWarn = console.warn;
   const origInfo = console.info;
   const origDebug = console.debug;
+  const origClear = console.clear;
+
+  origClear();
+  origLog(
+    "%cSTOP!%c\n\nThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature or 'hack' someone's account, it is a scam and will give them access to your account.\n\n%cWHOLE SITE MADE BY VIBE GADGET",
+    "color: red; font-size: 50px; font-weight: bold; text-shadow: 2px 2px 0 #000;",
+    "color: inherit; font-size: 16px;",
+    "color: #10b981; font-size: 30px; font-weight: bold; font-family: monospace; text-shadow: 1px 1px 0 #000;"
+  );
 
   const obf = ["404", "firebase", "genai", "ai", "run.app", "onesignal", "vercel", "api key", "currentcolor", "tailwind"];
   function shouldHide(args: any[]) {
