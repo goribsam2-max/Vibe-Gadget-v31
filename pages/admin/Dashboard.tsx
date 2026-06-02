@@ -257,7 +257,11 @@ const AdminDashboard: React.FC = () => {
             if (order.createdAt && order.createdAt.toDate) {
                const orderDate = order.createdAt.toDate();
                if (orderDate >= date && orderDate < new Date(date.getTime() + 86400000) && order.status !== "Cancelled") {
-                 return sum + (Number(order.total) || 0);
+                 let t = Number(order.total);
+                 if (isNaN(t)) {
+                   t = Number(String(order.total).replace(/[^0-9.-]+/g,""));
+                 }
+                 return sum + (isNaN(t) ? 0 : t);
                }
             }
             return sum;
@@ -449,6 +453,7 @@ const AdminDashboard: React.FC = () => {
                     strokeWidth={3}
                     fillOpacity={1}
                     fill="url(#colorRevenue)"
+                    isAnimationActive={false}
                   />
                 </AreaChart>
               </ResponsiveContainer>

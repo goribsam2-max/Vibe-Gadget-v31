@@ -1299,6 +1299,7 @@ const AffiliatePage: React.FC = () => {
                     strokeWidth={4}
                     fillOpacity={1}
                     fill="url(#colorSales)"
+                    isAnimationActive={false}
                   />
                 </AreaChart>
               </ResponsiveContainer>

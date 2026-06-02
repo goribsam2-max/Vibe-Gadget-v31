@@ -56,12 +56,13 @@ async function generateSitemap() {
 </urlset>
 `;
 
-    fs.writeFileSync(path.resolve(process.cwd(), "public/sitemap.xml"), sitemap);
-    console.log("Sitemap generated successfully at public/sitemap.xml");
+    fs.writeFileSync(path.resolve(process.cwd(), "dist/sitemap.xml"), sitemap);
+    console.log("Sitemap generated successfully at dist/sitemap.xml");
     process.exit(0);
   } catch (err) {
     console.error("Error generating sitemap:", err);
-    process.exit(1);
+    // Don't fail the build on sitemap error
+    process.exit(0);
   }
 }
 

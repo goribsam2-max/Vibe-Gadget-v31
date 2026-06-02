@@ -2,7 +2,7 @@
 {
   "name": "VibeGadget Premium",
   "short_name": "VibeGadget",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
