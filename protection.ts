@@ -112,6 +112,10 @@ export function setupProtection() {
      const after = Date.now();
      if (after - before > 100) { // console is open
         document.body.style.display = 'none'; // hide everything
+        // Clear sensitive session data to prevent tampering
+        sessionStorage.clear();
+        // We do not clear localStorage so users don't lose their carts, 
+        // but session states are cleared to protect them.
      } else {
         document.body.style.display = 'block';
      }

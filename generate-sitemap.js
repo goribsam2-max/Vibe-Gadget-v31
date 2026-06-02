@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import fs from "fs";
+import path from "path";
 
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyC1vnVFbzezdpqAxjU5GXgAxu63DN05eyE",
@@ -19,8 +21,9 @@ const toSlug = (name) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-export default async function handler(req, res) {
+async function generateSitemap() {
   try {
+    console.log("Generating sitemap...");
     const productsRef = collection(db, "products");
     const snapshot = await getDocs(productsRef);
     let urls = "";
@@ -53,11 +56,13 @@ export default async function handler(req, res) {
 </urlset>
 `;
 
-    res.setHeader("Content-Type", "application/xml");
-    res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate");
-    res.status(200).send(sitemap);
+    fs.writeFileSync(path.resolve(process.cwd(), "public/sitemap.xml"), sitemap);
+    console.log("Sitemap generated successfully at public/sitemap.xml");
+    process.exit(0);
   } catch (err) {
     console.error("Error generating sitemap:", err);
-    res.status(500).send("Error generating sitemap");
+    process.exit(1);
   }
 }
+
+generateSitemap();
