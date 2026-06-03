@@ -296,6 +296,7 @@ export function Header() {
             size="icon"
             onClick={() => navigate("/search")}
             className={buttonClass}
+            aria-label="Search"
           >
             <Search className="w-5 h-5" />
           </Button>
@@ -304,6 +305,7 @@ export function Header() {
             size="icon"
             onClick={() => navigate("/wishlist")}
             className={buttonClass}
+            aria-label="Wishlist"
           >
             <Heart className="w-5 h-5" />
           </Button>
@@ -312,6 +314,7 @@ export function Header() {
             size="icon"
             onClick={() => navigate("/cart")}
             className={cn("relative", buttonClass)}
+            aria-label="Shopping Cart"
           >
             <ShoppingCart className="w-5 h-5" />
           </Button>
@@ -323,6 +326,7 @@ export function Header() {
               size="icon"
               onClick={() => navigate("/notifications")}
               className="rounded-full shadow-none border-none bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 w-9 h-9 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+              aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
             </Button>
@@ -339,6 +343,7 @@ export function Header() {
               size="icon"
               onClick={() => navigate("/notifications")}
               className="hidden sm:flex rounded-full shadow-none border-none bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 w-9 h-9 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+              aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
             </Button>

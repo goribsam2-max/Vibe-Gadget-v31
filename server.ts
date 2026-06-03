@@ -425,13 +425,16 @@ async function startServer() {
       if (admin.apps?.length) {
         const snapshot = await getFirestore().collection("products").get();
         let urls = ``;
+        const today = new Date().toISOString().split('T')[0];
         for (const doc of snapshot.docs) {
           const data = doc.data();
           if (data.name) {
             const slug = toSlug(data.name);
+            const lastMod = data.updatedAt ? new Date(data.updatedAt._seconds ? data.updatedAt._seconds * 1000 : data.updatedAt).toISOString().split('T')[0] : (data.createdAt ? new Date(data.createdAt._seconds ? data.createdAt._seconds * 1000 : data.createdAt).toISOString().split('T')[0] : today);
             urls += `
   <url>
     <loc>https://www.vibegadgets.shop/${slug}</loc>
+    <lastmod>${lastMod}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>`;
@@ -442,11 +445,13 @@ async function startServer() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.vibegadgets.shop/</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.vibegadgets.shop/all-products</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>${urls}

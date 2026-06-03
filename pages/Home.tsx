@@ -429,6 +429,8 @@ const Home: React.FC<{ userData?: any }> = ({ userData }) => {
                   <img
                     src={imageUrl}
                     alt={cat}
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(cat)}&backgroundColor=f88c49`;
                     }}
@@ -605,6 +607,8 @@ const Home: React.FC<{ userData?: any }> = ({ userData }) => {
                     src={banner.imageUrl}
                     alt="Banner"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               ))}
@@ -638,6 +642,8 @@ const Home: React.FC<{ userData?: any }> = ({ userData }) => {
                     src={banner.imageUrl}
                     alt="Banner"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               ))}

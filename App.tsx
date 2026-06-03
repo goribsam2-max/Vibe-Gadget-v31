@@ -149,6 +149,11 @@ const SEOProvider = () => {
                  "addressLocality": "Dhaka",
                  "addressCountry": "BD"
                },
+               "sameAs": [
+                 "https://www.facebook.com/vibegadget.shop/",
+                 "https://www.instagram.com/vibegadgets.shop/",
+                 "https://www.youtube.com/@vibegadgets"
+               ],
                "knowsAbout": ["AI Gadgets", "Artificial Intelligence", "Smartwatches", "Mobile Accessories", "Earbuds", "Smart Home Technology", "Top AI Devices Bangladesh"]
              }
            ]);

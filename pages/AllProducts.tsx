@@ -32,6 +32,15 @@ const AllProducts: React.FC = () => {
       <SEO
         title="All Products"
         description="Browse our vast collection of premium gadgets, mobile phones, chargers, and accessories at VibeGadget."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "itemListElement": products.slice(0, 10).map((product, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "url": `${window.location.origin}/product/${product.id}`
+          }))
+        }}
       />
       
 

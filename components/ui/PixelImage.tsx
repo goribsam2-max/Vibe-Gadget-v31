@@ -123,6 +123,8 @@ export const PixelImage = ({
           <img
             src={src}
             alt={alt}
+            loading="lazy"
+            decoding="async"
             className={cn(
               "absolute inset-0 w-full h-full object-cover",
               grayscaleAnimation && (showColor ? "grayscale-0" : "grayscale"),
