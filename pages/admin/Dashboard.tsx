@@ -37,6 +37,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { StaffContext } from "../../components/AdminLayout";
+
 const ADMIN_PIN_ITEMS: PinListItem[] = [
   {
     id: 'manage-products',
@@ -219,6 +221,30 @@ const ADMIN_PIN_ITEMS: PinListItem[] = [
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const notify = useNotify();
+  const staffContext = React.useContext(StaffContext);
+  
+  const permittedItems = React.useMemo(() => {
+    if (staffContext.isSuperAdmin) return ADMIN_PIN_ITEMS;
+    return ADMIN_PIN_ITEMS.filter(item => {
+      // mapping item.id to module id from ManageStaff
+      const moduleMap: Record<string, string> = {
+        'manage-products': 'products',
+        'manage-orders': 'orders',
+        'manage-users': 'users',
+        'manage-coupons': 'coupons',
+        'manage-tickets': 'helpdesk',
+        'manage-withdrawals': 'refunds', // closest match to refunds from old map
+        'manage-storefront': 'banners',
+        'manage-stories': 'stories'
+      };
+      
+      const modId = moduleMap[item.id];
+      if (modId && staffContext.permissions.includes(modId)) return true;
+      // Also allow stories if they have products or storefront maybe? Let's add stories to the ALL_MODULES in ManageStaff later.
+      return false;
+    });
+  }, [staffContext]);
+
   const [stats, setStats] = useState({ products: 0, users: 0, orders: 0 });
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<any[]>([]);
@@ -319,7 +345,7 @@ const AdminDashboard: React.FC = () => {
                 : new Date().getHours() < 18
                   ? "Good Afternoon"
                   : "Good Evening"}
-              , Admin
+              , {staffContext.isStaff ? 'Staff' : 'Admin'}
             </h1>
             <p className="text-zinc-500 text-[10px] md:text-xs font-bold tracking-normal flex items-center">
               <span className="w-2 h-2 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 animate-pulse mr-2"></span>
@@ -335,7 +361,7 @@ const AdminDashboard: React.FC = () => {
 
         {/* Quick Actions / PinList */}
         <div className="md:w-[400px] shrink-0 relative z-10 animate-fade-in mt-6 md:mt-0">
-          <PinList items={ADMIN_PIN_ITEMS} />
+          <PinList items={permittedItems} />
         </div>
       </div>
 

@@ -26,6 +26,7 @@ const ManageStaff: React.FC = () => {
   const ALL_MODULES = [
     { id: "products", name: "Products Catalog" },
     { id: "orders", name: "Order Management" },
+    { id: "stories", name: "Stories" },
     { id: "users", name: "User Database" },
     { id: "coupons", name: "Coupons & Promos" },
     { id: "helpdesk", name: "Help Desk" },

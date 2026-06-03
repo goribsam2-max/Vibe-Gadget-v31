@@ -1,6 +1,4 @@
 import { formatPrice } from "../lib/utils";
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -14,7 +12,6 @@ const EReceipt: React.FC = () => {
   const { id } = useParams();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -36,32 +33,8 @@ const EReceipt: React.FC = () => {
     return () => unsubscribe();
   }, [id]);
 
-  const handleDownload = async () => {
-    setDownloading(true);
-    const receiptElement = document.getElementById("receipt-area");
-    if (!receiptElement) {
-      setDownloading(false);
-      return;
-    }
-
-    try {
-      const canvas = await html2canvas(receiptElement, {
-        scale: 2,
-        useCORS: true,
-      });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: [canvas.width, canvas.height],
-      });
-      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-      pdf.save(`VibeGadget_Invoice_${order?.id?.slice(0, 8)}.pdf`);
-    } catch (err) {
-      console.error("Download error:", err);
-    } finally {
-      setDownloading(false);
-    }
+  const handleDownload = () => {
+    window.print();
   };
 
   if (loading)
@@ -76,7 +49,7 @@ const EReceipt: React.FC = () => {
       <div className="h-screen flex flex-col items-center justify-center p-10 text-center">
         <p className="font-bold mb-4">Invoice not found.</p>
         <Button
-          variant="primary"
+          variant="default"
           onClick={() => navigate("/")}
           className="w-full px-10"
         >

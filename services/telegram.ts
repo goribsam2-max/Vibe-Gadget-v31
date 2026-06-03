@@ -1,6 +1,72 @@
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
-const BOT_TOKEN = "8236254617:AAFFTI9j4pl6U-8-pdJgZigWb2M75oBmyzg";
-const CHAT_ID = "5494141897";
+const getTelegramConfig = async () => {
+  try {
+    const snap = await getDoc(doc(db, "settings", "platform"));
+    if (snap.exists()) {
+      const data = snap.data();
+      return {
+        token: data.telegramToken || "8236254617:AAFFTI9j4pl6U-8-pdJgZigWb2M75oBmyzg",
+        chatIds: (data.telegramChatId || "5494141897").split(',').map((id: string) => id.trim()).filter((id: string) => id),
+      };
+    }
+  } catch (e) {
+    console.error("Failed to fetch telegram config", e);
+  }
+  return {
+    token: "8236254617:AAFFTI9j4pl6U-8-pdJgZigWb2M75oBmyzg",
+    chatIds: ["5494141897"]
+  };
+};
+
+const sendToChats = async (message: string) => {
+  const { token, chatIds } = await getTelegramConfig();
+  if (!token || chatIds.length === 0) return null;
+  
+  const results = await Promise.all(
+    chatIds.map(async (chatId) => {
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: "HTML",
+          }),
+        });
+        return await response.json();
+      } catch (e) {
+        console.error("Telegram send error to chat", chatId, e);
+        return null;
+      }
+    })
+  );
+  return results[0];
+};
+
+export const sendSystemAlertToTelegram = async (errorMsg: string, stacktrace?: string) => {
+  try {
+    const message = `
+<b>🚨 SYSTEM ALERT / BUG REPORT</b>
+━━━━━━━━━━━━━━━━━━
+<b>Message:</b> ${errorMsg}
+<b>Time:</b> ${new Date().toLocaleString('en-BD')}
+
+<b>Stacktrace / Details:</b>
+<pre>${(stacktrace || 'N/A').substring(0, 500)}</pre>
+━━━━━━━━━━━━━━━━━━
+<b>Check System Logs!</b>
+`;
+    return await sendToChats(message);
+  } catch (error) {
+    console.error("Telegram Notification Gateway Error:", error);
+    return null;
+  }
+};
 
 export const sendAffiliateRequestToTelegram = async (requestData: any) => {
   try {
@@ -31,19 +97,7 @@ export const sendAffiliateRequestToTelegram = async (requestData: any) => {
 <b>Review in Admin Panel!</b>
 `;
 
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
-
-    return await response.json();
+    return await sendToChats(message);
   } catch (error) {
     console.error("Telegram Notification Gateway Error:", error);
     return null;
@@ -89,19 +143,7 @@ ${paymentDetails}
 <code>${orderData.id ? orderData.id.toUpperCase() : 'NEW_ENTRY'}</code>
 `;
 
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
-
-    return await response.json();
+    return await sendToChats(message);
   } catch (error) {
     console.error("Telegram Notification Gateway Error:", error);
     return null;
@@ -128,19 +170,7 @@ export const sendCreatorVideoToTelegram = async (data: any) => {
 <b>Review in Admin Panel!</b>
 `;
 
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
-
-    return await response.json();
+    return await sendToChats(message);
   } catch (error) {
     console.error("Telegram Error:", error);
     return null;
@@ -166,19 +196,7 @@ export const sendWithdrawalRequestToTelegram = async (data: any) => {
 <b>Process via Admin Panel!</b>
 `;
 
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
-
-    return await response.json();
+    return await sendToChats(message);
   } catch (error) {
     console.error("Telegram Error:", error);
     return null;
@@ -205,19 +223,7 @@ export const sendDepositRequestToTelegram = async (data: any) => {
 <b>Process via Admin Panel!</b>
 `;
 
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
-
-    return await response.json();
+    return await sendToChats(message);
   } catch (error) {
     console.error("Telegram Error:", error);
     return null;

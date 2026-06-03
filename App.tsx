@@ -649,7 +649,7 @@ const AppContent: React.FC = () => {
           <Route path="/__/auth/action" element={<PageWrapper><NewPassword /></PageWrapper>} />
           <Route path="/auth/action" element={<PageWrapper><NewPassword /></PageWrapper>} />
           
-          <Route path="/admin/*" element={isAdminOrStaff ? (
+          <Route path="/admin/*" element={
              <Routes>
                 <Route element={<AdminLayout userData={userData} />}>
                   <Route index element={<PageWrapper><AdminDashboard /></PageWrapper>} />
@@ -681,7 +681,7 @@ const AppContent: React.FC = () => {
                   <Route path="mock/*" element={<PageWrapper><GenericAdminMock /></PageWrapper>} />
                 </Route>
              </Routes>
-          ) : <Navigate to="/" replace />} />
+          } />
           <Route path="/:slug" element={<PageWrapper><ProductDetails /></PageWrapper>} />
           <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
         </Routes>
