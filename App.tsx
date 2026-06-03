@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, onSnapshot, updateDoc, collection, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
@@ -438,14 +439,14 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
      const timer = setTimeout(() => {
         setLoading(false);
-     }, 3000);
+     }, 2000);
      return () => clearTimeout(timer);
   }, [location.pathname]);
 
   return (
     <ErrorBoundary>
       <div className="w-full">
-        {loading && <PageSkeleton pathname={location.pathname} />}
+        {loading && document.body ? createPortal(<PageSkeleton pathname={location.pathname} />, document.body) : null}
         <div style={{ display: loading ? 'none' : 'block' }}>
            {children}
         </div>

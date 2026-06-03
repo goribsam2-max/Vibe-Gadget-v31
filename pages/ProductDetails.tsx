@@ -611,39 +611,89 @@ const ProductDetails: React.FC = () => {
         ? [product.image]
         : ["https://placehold.co/600x600/png"];
 
-  const jsonLd = {
-    "@context": "https://schema.org/",
-    "@type": "Product",
-    name: product.name,
-    image: product.images || [product.image],
-    description:
-      product.description || `Buy ${product.name} at VibeGadget premium store.`,
-    sku: product.id,
-    offers: {
-      "@type": "Offer",
-      url: window.location.href,
-      priceCurrency: "BDT",
-      price: mysteryOffer
-        ? mysteryOffer.discountPrice
-        : product.isOffer && product.offerPrice
-          ? product.offerPrice
-          : product.price,
-      availability:
-        product.stock > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-      itemCondition: "https://schema.org/NewCondition",
+  const basePrice = mysteryOffer
+    ? mysteryOffer.discountPrice
+    : product.isOffer && product.offerPrice
+      ? product.offerPrice
+      : product.price;
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      name: product.name,
+      image: images,
+      description:
+        product.description || `Buy ${product.name} at VibeGadget premium store.`,
+      sku: product.id,
+      offers: {
+        "@type": "Offer",
+        url: window.location.href,
+        priceCurrency: "BDT",
+        price: basePrice,
+        availability:
+          product.stock > 0
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+        itemCondition: "https://schema.org/NewCondition",
+      },
+      ...(product.rating && product.numReviews
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: product.rating,
+              reviewCount: product.numReviews,
+            },
+          }
+        : {}),
     },
-    ...(product.rating && product.numReviews
-      ? {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: product.rating,
-            reviewCount: product.numReviews,
-          },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": window.location.origin,
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Products",
+          "item": `${window.location.origin}/all-products`,
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": product.name,
+          "item": window.location.href,
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": `Is the ${product.name} Authentic?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, absolutely! We guarantee 100% authenticity for all our tech gadgets and accessories at Vibe Gadgets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the delivery time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We offer swift nationwide delivery within 1-3 business days inside Dhaka, and 3-5 days outside Dhaka."
+          }
         }
-      : {}),
-  };
+      ]
+    }
+  ];
 
   return (
     <div className="w-full mx-auto min-h-screen bg-background text-foreground pb-32 overflow-x-hidden">
@@ -652,17 +702,11 @@ const ProductDetails: React.FC = () => {
         description={product.description || `Buy ${product.name}`}
         image={product.image}
         jsonLd={jsonLd}
-        price={
-          mysteryOffer
-            ? mysteryOffer.discountPrice
-            : product.isOffer && product.offerPrice
-              ? product.offerPrice
-              : product.price
-        }
+        price={basePrice}
         availability={product.stock > 0 ? "in stock" : "out of stock"}
       />
       <div className="w-full max-w-7xl mx-auto p-4 md:p-8 animate-fade-in flex flex-col xl:flex-row gap-8 items-start">
-        <div className="flex-1 min-w-0 flex flex-col w-full">
+        <article className="flex-1 min-w-0 flex flex-col w-full">
           {/* Breadcrumbs Navigation */}
           <nav
             aria-label="Breadcrumb"
@@ -929,17 +973,17 @@ const ProductDetails: React.FC = () => {
               </div>
 
               {/* Description */}
-              <div className="bg-white dark:bg-zinc-900/50 rounded-2xl p-5 md:p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm mt-2">
-                <h3 className="text-sm font-bold mb-3 text-zinc-900 dark:text-zinc-100">
+              <section className="bg-white dark:bg-zinc-900/50 rounded-2xl p-5 md:p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm mt-2">
+                <h2 className="text-sm font-bold mb-3 text-zinc-900 dark:text-zinc-100">
                   <Tr>Product Description</Tr>
-                </h3>
-                <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">
+                </h2>
+                <div className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">
                   <Tr>
                     {product.description ||
                       "High-quality premium accessory designed for ultimate performance and style."}
                   </Tr>
-                </p>
-              </div>
+                </div>
+              </section>
 
               {/* Seller Information */}
               <div className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-800">
@@ -972,11 +1016,36 @@ const ProductDetails: React.FC = () => {
                   </Button>
                 </div>
               </div>
+
+              {/* FAQ Section */}
+              <section className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                <h2 className="text-lg font-bold mb-4 text-zinc-900 dark:text-zinc-100">
+                  <Tr>Frequently Asked Questions</Tr>
+                </h2>
+                <div className="space-y-4">
+                  <article className="bg-zinc-50 dark:bg-zinc-900/40 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800/60">
+                    <h3 className="font-semibold text-sm text-zinc-800 dark:text-zinc-200 mb-1">
+                      Is the {product.name} Authentic?
+                    </h3>
+                    <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400">
+                      Yes, absolutely! We guarantee 100% authenticity for all our tech gadgets and accessories at Vibe Gadgets.
+                    </p>
+                  </article>
+                  <article className="bg-zinc-50 dark:bg-zinc-900/40 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800/60">
+                    <h3 className="font-semibold text-sm text-zinc-800 dark:text-zinc-200 mb-1">
+                      What is the delivery time?
+                    </h3>
+                    <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400">
+                      We offer swift nationwide delivery within 1-3 business days inside Dhaka, and 3-5 days outside Dhaka.
+                    </p>
+                  </article>
+                </div>
+              </section>
             </div>
           </main>
 
           {/* Reviews Section */}
-          <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800 pb-8">
+          <section className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800 pb-8">
             <div className="flex flex-col items-center justify-center mb-10 text-center">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
@@ -1080,11 +1149,11 @@ const ProductDetails: React.FC = () => {
                 </div>
               )}
             </div>
-          </div>
+          </section>
 
           {/* Related / Bundle section moved below Reviews */}
           {bundleItems.length > 0 && (
-            <div className="xl:hidden mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+            <aside className="xl:hidden mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                   <Tr>You May Like</Tr>
@@ -1096,7 +1165,7 @@ const ProductDetails: React.FC = () => {
                   <ProductCard key={item.id} product={item} index={index} />
                 ))}
               </div>
-            </div>
+            </aside>
           )}
 
           {typeof product.videoUrl === "string" &&
@@ -1117,7 +1186,7 @@ const ProductDetails: React.FC = () => {
                 </div>
               </div>
             )}
-        </div>
+        </article>
 
         <aside className="hidden xl:block w-[350px] shrink-0 sticky top-24 h-max z-30">
           {showSideCart ? (

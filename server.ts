@@ -616,9 +616,13 @@ async function startServer() {
           <meta property="og:title" content="${title} | Vibe Gadgets" />
           <meta property="og:description" content="${description}" />
           <meta property="og:image" content="${imageUrl}" />
+          <meta property="og:image:alt" content="${title}" />
           <meta property="og:type" content="product" />
+          <meta property="og:url" content="https://www.vibegadgets.shop/${slug || id}" />
+          <meta property="product:brand" content="VibeGadget" />
           <meta property="product:price:amount" content="${price}" />
           <meta property="product:price:currency" content="BDT" />
+          <meta property="product:availability" content="instock" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="${title}" />
           <meta name="twitter:description" content="${description}" />

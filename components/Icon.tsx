@@ -14,6 +14,8 @@ const formatNameToPascal = (str: string) => {
 }
 
 const customIconMapping: Record<string, keyof typeof LucideIcons> = {
+  'bars': 'Menu',
+  'instagram': 'Camera',
   'user-shield': 'Shield',
   'envelope': 'Mail',
   'file-contract': 'FileText',

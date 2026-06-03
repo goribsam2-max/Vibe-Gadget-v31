@@ -427,7 +427,7 @@ function NewMenuItem({ icon, label, color, bg, onClick }: { icon: React.ReactNod
                 </div>
                 <span className="font-bold text-[14px] sm:text-[15px] text-zinc-800 dark:text-zinc-200">{label}</span>
             </div>
-            <Icon name="angle-right" className="text-zinc-300 dark:text-zinc-600 px-2" />
+            <Icon name="chevron-right" className="text-zinc-300 dark:text-zinc-600 px-2" />
         </div>
     )
 }

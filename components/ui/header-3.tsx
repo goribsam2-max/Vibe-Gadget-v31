@@ -201,8 +201,9 @@ export function Header() {
   const location = useLocation();
 
   const isAdmin = location.pathname.startsWith("/admin");
+  const isAffiliate = location.pathname.startsWith("/affiliate");
   const isInnerPage =
-    location.pathname !== "/" && location.pathname !== "/admin";
+    location.pathname !== "/" && location.pathname !== "/admin" && !isAffiliate;
   const linksToShow = isAdmin ? adminLinks : productLinks;
 
   useEffect(() => {
