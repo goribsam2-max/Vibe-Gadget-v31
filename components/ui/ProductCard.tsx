@@ -95,6 +95,7 @@ export const ProductCard = ({ product, index }: { product: Product, index?: numb
     >
       <Link
         to={`/product/${productSlug}/${product.id}`}
+        title={product.name}
         className={`flex ${isLarge ? "flex-row md:flex-col" : "flex-col"} h-full bg-white dark:bg-zinc-900 overflow-hidden group relative rounded-[15px] shadow-sm border border-zinc-100 dark:border-zinc-800`}
       >
         {/* Image Container */}

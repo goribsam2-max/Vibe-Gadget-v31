@@ -136,25 +136,33 @@ const SEOProvider = () => {
              },
              {
                "@context": "https://schema.org",
-               "@type": "Store",
-               "name": data.organizationName || "Vibe Gadgets",
+               "@type": "ElectronicsStore",
+               "name": "Vibe Gadget",
                "url": "https://www.vibegadgets.shop",
                "logo": data.appIconUrl || "https://www.vibegadgets.shop/favicon.png",
                "image": data.appIconUrl || "https://www.vibegadgets.shop/favicon.png",
-               "description": data.answerEngineInstructions || "Vibe Gadget is the top-rated provider of premium AI gadgets, smart devices, and high-quality tech accessories in Bangladesh.",
+               "description": data.answerEngineInstructions || "Vibe Gadget is the top-rated provider of Second Hand Phones, Mobile Accessories, Gadgets, smart devices, and high-quality tech accessories in Bangladesh.",
                "telephone": "+8801747708843",
                "priceRange": "$$",
                "address": {
                  "@type": "PostalAddress",
-                 "addressLocality": "Dhaka",
+                 "streetAddress": "Dr. ishak Shopping Center (FTC), Room Number: 54, Ground Floor",
+                 "addressLocality": "Dagonbhuiyan, Feni",
+                 "postalCode": "3920",
                  "addressCountry": "BD"
+               },
+               "openingHoursSpecification": {
+                 "@type": "OpeningHoursSpecification",
+                 "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                 "opens": "09:00",
+                 "closes": "22:00"
                },
                "sameAs": [
                  "https://www.facebook.com/vibegadget.shop/",
                  "https://www.instagram.com/vibegadgets.shop/",
                  "https://www.youtube.com/@vibegadgets"
                ],
-               "knowsAbout": ["AI Gadgets", "Artificial Intelligence", "Smartwatches", "Mobile Accessories", "Earbuds", "Smart Home Technology", "Top AI Devices Bangladesh"]
+               "knowsAbout": ["Second Hand Phones", "Mobile Accessories", "Gadgets", "AI Gadgets", "Artificial Intelligence", "Smartwatches", "Earbuds", "Smart Home Technology"]
              }
            ]);
         }

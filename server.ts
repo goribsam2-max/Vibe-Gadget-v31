@@ -642,6 +642,17 @@ async function startServer() {
         } else {
           template = template.replace("</head>", `${metaTags}\n</head>`);
         }
+
+        // Basic HTML Pre-rendering for AEO / Bots
+        const preRenderedHTML = `
+          <div style="display: none;" aria-hidden="true">
+            <h1>${title}</h1>
+            <p>${description}</p>
+            <img src="${imageUrl}" alt="${title}" />
+            <p>Price: BDT ${price}</p>
+          </div>
+        `;
+        template = template.replace('<div id="root"></div>', '<div id="root">' + preRenderedHTML + '</div>');
       } else if (req.path === "/" && admin.apps?.length) {
         // Fetch home SEO
         try {

@@ -646,6 +646,35 @@ const ProductDetails: React.FC = () => {
             },
           }
         : {}),
+      ...(reviews && reviews.length > 0
+        ? {
+            review: reviews.slice(0, 3).map((r) => ({
+              "@type": "Review",
+              "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": r.rating,
+                "bestRating": "5"
+              },
+              "author": {
+                "@type": "Person",
+                "name": r.userName || "Verified Buyer"
+              },
+              "reviewBody": r.comment
+            }))
+          }
+        : {}),
+      ...(product.videoUrl
+        ? {
+            subjectOf: {
+              "@type": "VideoObject",
+              "name": `${product.name} Video Review`,
+              "description": `Video review and unboxing for ${product.name}`,
+              "thumbnailUrl": product.images?.[0] || product.image,
+              "uploadDate": new Date().toISOString(),
+              "contentUrl": product.videoUrl
+            }
+          }
+        : {})
     },
     {
       "@context": "https://schema.org",
