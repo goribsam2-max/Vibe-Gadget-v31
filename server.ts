@@ -441,6 +441,28 @@ async function startServer() {
           }
         }
         
+        const staticPages = [
+          "/privacy", "/about", "/terms", "/cookie-policy", 
+          "/refund-policy", "/shipping-policy", "/disclaimer", "/contact", "/blog"
+        ];
+        
+        let staticUrls = staticPages.map(page => `
+  <url>
+    <loc>https://www.vibegadgets.shop${page}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join("");
+
+        const categories = ["Mobile", "Accessories", "Gadgets", "Chargers", "Second Hand Phones"];
+        let categoryUrls = categories.map(cat => `
+  <url>
+    <loc>https://www.vibegadgets.shop/all-products?category=${encodeURIComponent(cat)}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`).join("");
+
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -454,7 +476,7 @@ async function startServer() {
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-  </url>${urls}
+  </url>${categoryUrls}${staticUrls}${urls}
 </urlset>`;
 
         res.header("Content-Type", "application/xml");
@@ -624,6 +646,7 @@ async function startServer() {
           <meta property="og:image:alt" content="${title}" />
           <meta property="og:type" content="product" />
           <meta property="og:url" content="https://www.vibegadgets.shop/${slug || id}" />
+          <link rel="canonical" href="https://www.vibegadgets.shop/${slug || id}" />
           <meta property="product:brand" content="VibeGadget" />
           <meta property="product:price:amount" content="${price}" />
           <meta property="product:price:currency" content="BDT" />
@@ -653,6 +676,24 @@ async function startServer() {
           </div>
         `;
         template = template.replace('<div id="root"></div>', '<div id="root">' + preRenderedHTML + '</div>');
+      } else if (req.path === "/all-products") {
+        const category = req.query.category ? String(req.query.category) : "All";
+        const canonicalUrl = category !== "All" ? `https://www.vibegadgets.shop/all-products?category=${encodeURIComponent(category)}` : `https://www.vibegadgets.shop/all-products`;
+        
+        let metaTags = `
+          <title>${category === "All" ? "All Products" : `${category} Products`} | Vibe Gadgets</title>
+          <meta name="description" content="Browse our collection of ${category} at VibeGadget." />
+          <meta property="og:title" content="${category === "All" ? "All Products" : `${category} Products`} | Vibe Gadgets" />
+          <link rel="canonical" href="${canonicalUrl}" />
+          <meta property="og:url" content="${canonicalUrl}" />
+        `;
+        
+        const metaRegex =/<!-- META_TAGS_PLACEHOLDER -->[\s\S]*?<!-- END_META_TAGS_PLACEHOLDER -->/;
+        if (metaRegex.test(template)) {
+          template = template.replace(metaRegex, metaTags);
+        } else {
+          template = template.replace("</head>", `${metaTags}\n</head>`);
+        }
       } else if (req.path === "/" && admin.apps?.length) {
         // Fetch home SEO
         try {

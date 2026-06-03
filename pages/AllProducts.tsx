@@ -12,8 +12,19 @@ import { ProductSkeleton } from "../components/Skeletons";
 const AllProducts: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialCategory = searchParams.get('category') || location.state?.category || "All";
   const [products, setProducts] = useState<Product[]>([]);
-  const [activeTab, setActiveTab] = useState(location.state?.category || "All");
+  const [activeTab, setActiveTab] = useState(initialCategory);
+
+  useEffect(() => {
+    setActiveTab(searchParams.get('category') || "All");
+  }, [location.search]);
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    navigate(`/all-products${tab === "All" ? "" : `?category=${encodeURIComponent(tab)}`}`, { replace: true });
+  };
   const [quickViewImg, setQuickViewImg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,7 +59,7 @@ const AllProducts: React.FC = () => {
         {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabChange(tab)}
             className={`px-8 py-3.5 rounded-full text-[10px] md:text-xs font-semibold tracking-normal border transition-all shrink-0 ${activeTab === tab ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 border-zinc-900 dark:border-white shadow-sm" : "bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-white"}`}
           >
             {tab}
