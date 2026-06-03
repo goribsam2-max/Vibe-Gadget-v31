@@ -43,23 +43,6 @@ const SEOProvider = () => {
         }
         metaRobots.setAttribute('content', data.robots || 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
         
-        // --- AEO (Answer Engine) FIELDS ---
-        let searchEngineMeta = document.querySelector('meta[name="searchEngine"]');
-        if (!searchEngineMeta) {
-          searchEngineMeta = document.createElement('meta');
-          searchEngineMeta.setAttribute('name', 'searchEngine');
-          document.head.appendChild(searchEngineMeta);
-        }
-        if (data.searchEngine) searchEngineMeta.setAttribute('content', data.searchEngine);
-
-        let answerEngineMeta = document.querySelector('meta[name="answerEngine"]');
-        if (!answerEngineMeta) {
-          answerEngineMeta = document.createElement('meta');
-          answerEngineMeta.setAttribute('name', 'answerEngine');
-          document.head.appendChild(answerEngineMeta);
-        }
-        if (data.answerEngineInstructions) answerEngineMeta.setAttribute('content', data.answerEngineInstructions);
-
         let publisherMeta = document.querySelector('meta[name="publisher"]');
         if (!publisherMeta) {
            publisherMeta = document.createElement('meta');
@@ -141,7 +124,7 @@ const SEOProvider = () => {
                "url": "https://www.vibegadgets.shop",
                "logo": data.appIconUrl || "https://www.vibegadgets.shop/favicon.png",
                "image": data.appIconUrl || "https://www.vibegadgets.shop/favicon.png",
-               "description": data.answerEngineInstructions || "Vibe Gadget is the top-rated provider of Second Hand Phones, Mobile Accessories, Gadgets, smart devices, and high-quality tech accessories in Bangladesh.",
+               "description": data.metaDescription || "Vibe Gadget is the top-rated provider of Second Hand Phones, Mobile Accessories, Gadgets, smart devices, and high-quality tech accessories in Bangladesh.",
                "telephone": "+8801747708843",
                "priceRange": "$$",
                "address": {

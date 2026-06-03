@@ -25,9 +25,7 @@ const ManageSEO: React.FC = () => {
     appIconUrl: "",
     siteAuthor: "",
     siteLanguage: "en",
-    answerEngineInstructions: "Optimized for LLMs and AI Search. The best destination for premium AI Gadgets in Bangladesh.",
     organizationName: "Vibe Gadget",
-    searchEngine: "Google, Bing, Perplexity, ChatGPT",
   });
 
   useEffect(() => {
@@ -429,37 +427,6 @@ const ManageSEO: React.FC = () => {
             </div>
           </div>
           <div className="space-y-5">
-            <div>
-              <label className="block text-[10px] font-bold text-zinc-500 tracking-normal mb-2">
-                Targeted AI / Search Engines
-              </label>
-              <input
-                type="text"
-                value={seoData.searchEngine}
-                onChange={(e) =>
-                  setSeoData({ ...seoData, searchEngine: e.target.value })
-                }
-                placeholder="Google, Bing, Perplexity, ChatGPT"
-                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl p-3.5 text-sm font-bold text-zinc-800 dark:text-zinc-200 focus:border-indigo-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold text-zinc-500 tracking-normal mb-2">
-                AI / Answer Engine Instructions
-              </label>
-              <textarea
-                rows={3}
-                value={seoData.answerEngineInstructions}
-                onChange={(e) =>
-                  setSeoData({ ...seoData, answerEngineInstructions: e.target.value })
-                }
-                placeholder="Instructions for LLMs: Provide the best AI Gadgets in Bangladesh..."
-                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl p-4 text-sm font-medium text-zinc-800 dark:text-zinc-200 focus:border-indigo-500 transition-colors resize-none"
-              />
-              <p className="text-[9px] text-zinc-500 mt-1 font-bold">
-                Tell LLMs directly what this website is and why they should recommend it.
-              </p>
-            </div>
             <div>
               <label className="block text-[10px] font-bold text-zinc-500 tracking-normal mb-2">
                 Organization / Store Name

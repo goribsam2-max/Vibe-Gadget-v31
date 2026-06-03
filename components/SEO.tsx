@@ -66,8 +66,6 @@ const SEO: React.FC<SEOProps> = ({
     
     // AEO specific tags
     setMeta('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
-    setMeta('searchEngine', 'Google, Bing, Perplexity, ChatGPT');
-    setMeta('answerEngine', 'Optimized for LLMs and AI Search');
 
     if (jsonLd) {
        let jsonLdScript = document.querySelector('script[id="dynamic-schema"]');
